@@ -4,6 +4,7 @@
 import numpy as np
 import sounddevice as sd
 import scipy.io.wavfile as wav
+from datetime import datetime
 
 
 def grabar_audio(fs=16000):
@@ -13,6 +14,7 @@ def grabar_audio(fs=16000):
 
     frames = []
     grabando = True
+    fecha_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def callback(indata, frame_count, time_info, status):
         if grabando:
@@ -34,7 +36,7 @@ def grabar_audio(fs=16000):
     duracion = len(audio) / fs
     print(f"✓ Grabación completada: {duracion:.2f} segundos grabados")
 
-    return audio, fs
+    return audio, fs, fecha_hora
 
 
 def guardar_wav(audio, fs, nombre_archivo='audio_original.wav'):
@@ -44,6 +46,36 @@ def guardar_wav(audio, fs, nombre_archivo='audio_original.wav'):
     print(f"✓ Guardado: {nombre_archivo}")
 
 
+def guardar_info_txt(audio, fs, fecha_hora, nombre_archivo='info_grabacion.txt'):
+    """Guarda información general de la grabación"""
+    duracion = len(audio) / fs
+    rms = np.sqrt(np.mean(audio ** 2))
+
+    with open(nombre_archivo, 'w', encoding='utf-8') as f:
+        f.write("=== INFORMACIÓN DE GRABACIÓN ===\n")
+        f.write(f"Fecha y hora           : {fecha_hora}\n")
+        f.write(f"Frecuencia de muestreo : {fs} Hz\n")
+        f.write(f"Total de muestras      : {len(audio)}\n")
+        f.write(f"Duración               : {duracion:.2f} segundos\n")
+        f.write(f"Amplitud máxima        : {np.max(audio):.6f}\n")
+        f.write(f"Amplitud mínima        : {np.min(audio):.6f}\n")
+        f.write(f"Volumen promedio (RMS) : {rms:.6f}\n")
+
+    print(f"✓ Guardado: {nombre_archivo}")
+
+
+def guardar_muestras_txt(audio, nombre_archivo='muestras_audio.txt'):
+    """Guarda los valores numéricos de cada muestra del audio"""
+    with open(nombre_archivo, 'w', encoding='utf-8') as f:
+        f.write("=== MUESTRAS DE AUDIO ===\n")
+        for i, muestra in enumerate(audio):
+            f.write(f"{i},{muestra:.6f}\n")
+
+    print(f"✓ Guardado: {nombre_archivo}")
+
+
 if __name__ == "__main__":
-    audio, fs = grabar_audio()
+    audio, fs, fecha_hora = grabar_audio()
     guardar_wav(audio, fs)
+    guardar_info_txt(audio, fs, fecha_hora)
+    guardar_muestras_txt(audio)

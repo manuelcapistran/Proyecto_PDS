@@ -1,0 +1,8 @@
+=== INFORMACIÓN DE GRABACIÓN ===
+Fecha y hora           : 2026-03-05 10:08:32
+Frecuencia de muestreo : 16000 Hz
+Total de muestras      : 62816
+Duración               : 3.93 segundos
+Amplitud máxima        : 0.000031
+Amplitud mínima        : -0.000031
+Volumen promedio (RMS) : 0.000015

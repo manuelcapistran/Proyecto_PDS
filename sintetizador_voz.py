@@ -65,6 +65,19 @@ class SintetizadorVoz:
         wav.write(nombre_archivo, self.fs, audio_normalizado)
         print(f"✓ Guardado: {nombre_archivo}")
 
+    
+
+    def guardar_info_txt(audio, fs, nombre_archivo='info_grabacion.txt'):
+        """Guarda información de la grabación en un archivo de texto"""
+        duracion = len(audio) / fs
+        with open(nombre_archivo, 'w', encoding='utf-8') as f:
+            f.write("=== INFORMACIÓN DE GRABACIÓN ===\n")
+            f.write(f"Frecuencia de muestreo : {fs} Hz\n")
+            f.write(f"Total de muestras      : {len(audio)}\n")
+            f.write(f"Duración               : {duracion:.2f} segundos\n")
+        print(f"✓ Guardado: {nombre_archivo}")
+    
+
     def preenfasis(self, audio, alpha=0.97):
         """Aplica filtro de pre-énfasis"""
         return np.append(audio[0], audio[1:] - alpha * audio[:-1])
@@ -241,7 +254,7 @@ def main():
     print("  • audio_original.wav")
     print("  • audio_sintetizado.wav")
     print("  • espectrogramas.png")
-    print("\n¡Listo! 🎉")
+    print("\n¡Listo! Programa finalizado")
 
 
 if __name__ == "__main__":
